@@ -1,0 +1,30 @@
+{
+    "name": "sjdskl/swxbot",
+    "type": "library",
+    "description": "weixin web login and tasks",
+    "keywords": ["wx", "weixin", "progress"],
+    "authors": [
+        {
+            "name": "skl",
+            "email": "sjdskl.skl@163.com",
+            "homepage": "http://blog.skl9.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "bacon/bacon-qr-code": "^1.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "rmccue/requests": "^1.7",
+        "symfony/console": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "swxbot\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "swxbot\\Tests\\": "tests/"
+        }
+    }
+}
