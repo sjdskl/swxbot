@@ -9,6 +9,8 @@
 
 namespace swxbot\Library\Progress;
 
+use swxbot\Library\Tasks\AbstractTask;
+
 abstract class AbstractProgress
 {
     protected $_progress = array();
@@ -19,6 +21,8 @@ abstract class AbstractProgress
     }
     
     public abstract function run(callable $callback, $title = 'swxbot');
+    
+    public abstract function runTask(AbstractTask $task, $title = 'swxbot-task');
     
     public abstract function runBackground($title = 'swxbot-master');
     
