@@ -22,7 +22,7 @@ abstract class AbstractProgress
     
     public abstract function run(callable $callback, $title = 'swxbot');
     
-    public abstract function runTask(AbstractTask $task, $title = 'swxbot-task');
+    public abstract function runTask(AbstractTask $task, $params = array(), $title = 'swxbot-task');
     
     public abstract function runBackground($title = 'swxbot-master');
     

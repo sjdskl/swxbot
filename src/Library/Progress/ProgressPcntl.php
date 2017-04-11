@@ -57,7 +57,7 @@ class ProgressPcntl extends AbstractProgress
         }
     }
 
-    public function runTask(AbstractTask $task, $title = 'swxbot-task')
+    public function runTask(AbstractTask $task, $params = array(), $title = 'swxbot-task')
     {
         $pid = pcntl_fork();
         if ($pid == -1) {
@@ -68,7 +68,7 @@ class ProgressPcntl extends AbstractProgress
             if (function_exists('cli_set_process_title') && PHP_OS !== 'Darwin') {
                 cli_set_process_title($title);
             }
-            $task->run();
+            $task->run($params);
             exit(0);
         } else {
             $this->_progress[$pid] = array(
