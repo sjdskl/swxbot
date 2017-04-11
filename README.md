@@ -1,4 +1,4 @@
-swxbot a weixin clien
+swxbot a weixin client
 =======================
 
 Guzzle is php weixin client that can login and send message and do something 
