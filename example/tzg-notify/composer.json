@@ -1,0 +1,10 @@
+{
+    "require": {
+        "sjdskl/swxbot": "^0.01.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Library\\": "Library/"
+        }
+    }
+}
