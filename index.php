@@ -62,7 +62,7 @@ $process = new Library\Progress\ProgressPcntl();
 $process->runBackground();
 $process->run(function() use ($a) {
     $a->listenMessage();
-});
+}, 'swxbot-listen-message');
 
 $process->run(function() use ($a) {
     $b = new Library\Tasks\LogTask($a);
@@ -71,7 +71,7 @@ $process->run(function() use ($a) {
         'sleep_time' => 5,
         'monitor_files' => array('sql_error')
     ));
-});
+}, 'swxbot-log-task');
 
 $process->wait();
 print_r($process->getProgresses());

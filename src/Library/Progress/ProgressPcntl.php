@@ -14,8 +14,11 @@ use swxbot\Library\Helper\Tools;
 class ProgressPcntl extends AbstractProgress
 {
     
-    public function runBackground()
+    public function runBackground($title = 'swxbot-master')
     {
+        if(function_exists('cli_set_process_title') && PHP_OS !== 'Darwin') {
+            cli_set_process_title($title);
+        }
         $pid = pcntl_fork();
         if($pid == -1) {
             Tools::console('创建子进程失败');
@@ -32,7 +35,7 @@ class ProgressPcntl extends AbstractProgress
         }
     }
     
-    public function run(callable $callback)
+    public function run(callable $callback, $title = 'swxbot')
     {
         $pid = pcntl_fork();
         if($pid == -1) {
@@ -40,6 +43,9 @@ class ProgressPcntl extends AbstractProgress
             return false;
         }
         if($pid == 0) {
+            if(function_exists('cli_set_process_title') && PHP_OS !== 'Darwin') {
+                   cli_set_process_title($title);
+            }
             $callback();
             exit(0);
         } else {

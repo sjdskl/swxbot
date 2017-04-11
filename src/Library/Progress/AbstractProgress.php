@@ -18,9 +18,9 @@ abstract class AbstractProgress
         return $this->_progress;
     }
     
-    public abstract function run(callable $callback);
+    public abstract function run(callable $callback, $title = 'swxbot');
     
-    public abstract function runBackground();
+    public abstract function runBackground($title = 'swxbot-master');
     
     public abstract function wait();
     
