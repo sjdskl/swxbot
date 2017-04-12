@@ -58,18 +58,39 @@ class Logininfo
     {
         $this->_deviceid = $this->_deviceid();
         $this->_initHttp();
-        $this->_waitLogin();
-        $this->_waitLogin(0);
-        $this->_redirect();
-        $this->_initWeixin();
-        $this->_notify();
-        $this->_contact();
+        $this->_run('_waitLogin');
+        $this->_run('_waitLogin', 0);
+        $this->_run('_redirect', null, 3);
+        $this->_run('_initWeixin', null, 3);
+        $this->_run('_notify', null, 3);
+        $this->_run('_contact', null, 3);
         Tools::console('共有:' . $this->_member_count . "个好友", "info");
         Tools::console('共有:' . count($this->_group_list) . "个群," . count($this->_member_list) . "个联系人," . count($this->_public_user_list) . "个公众号或服务号");
-        $this->_getbatchcontact();
-        $this->_testSyncCheck();
+//        $this->_run('_getbatchcontact');
+        $this->_run('_testSyncCheck', null, 3);
     }
     
+    protected function _run($method, $param = null, $trys = 0)
+    {
+        Tools::console('开始执行' . $method);
+        if($param !== null) {
+            $flag = $this->$method($param);
+        } else {
+            $flag = $this->$method();
+        }
+        
+        if(!$flag) {
+            Tools::console('执行' . $method . '失败' );
+            //重试
+            if($trys > 0) {
+                Tools::console('重新执行执行' . $method . ",trys=" . ($trys - 1));
+                $this->_run($method, $param, -- $trys);
+            } else {
+                exit;
+            }
+        } 
+    }
+
     protected function _deviceid()
     {
         $deviceid = 'e';
@@ -222,6 +243,10 @@ class Logininfo
                 unset($this->_member_list[$key]);
             }
         }
+        foreach($this->_member_list as $key => $value) {
+            $t[$value['UserName']] = $value;
+        }
+        $this->_member_list = $t;
         return true;
     }
 
@@ -231,14 +256,14 @@ class Logininfo
             return true;
         }
         $url = Config::get('api.wxbatchgetcontact') . "?" . http_build_query(array(
-                    'type' => 'ex',
-                    'pass_ticket' => $this->_pass_ticket,
-                    'r' => intval(microtime(true) * 100),
+            'type' => 'ex',
+            'pass_ticket' => $this->_pass_ticket,
+            'r' => intval(microtime(true) * 100),
         ));
 
         $post_data = array_merge($this->_base_request, array(
             "Count" => count($this->_group_list),
-            "List" => group_list($this->_group_list),
+            "List" => Tools::groupList($this->_group_list),
         ));
         $data = $this->_http->request('POST', $url, array(
             'json' => $post_data

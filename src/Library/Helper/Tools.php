@@ -188,5 +188,22 @@ class Tools
         }
         return stat($filename);
     }
+    
+    public static function groupList($group_list)
+    {
+        $t = array();
+        if(!$group_list) {
+            return $t;
+        }
+        foreach($group_list as $row) {
+            $t[] = array(
+                'UserName' => $row['UserName'],
+                'EncryChatRoomId' => ''
+            );
+        }
+
+        return $t;
+    }
+
 
 }
