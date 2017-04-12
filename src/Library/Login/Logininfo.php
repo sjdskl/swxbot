@@ -78,7 +78,7 @@ class Logininfo
         } else {
             $flag = $this->$method();
         }
-        
+        sleep(1);
         if(!$flag) {
             Tools::console('执行' . $method . '失败' );
             //重试
@@ -180,6 +180,7 @@ class Logininfo
         $this->_init_data = json_decode($data, true);
         if ($this->_init_data['BaseResponse']['Ret'] != 0) {
             Tools::console('initWeixin获取数据出错了', 'error');
+            return false;
         }
         $this->_sync_key_arr = $this->_init_data['SyncKey'];
         $this->_sync_key = Tools::syncKey($this->_init_data['SyncKey']);

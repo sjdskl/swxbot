@@ -16,6 +16,12 @@ require APP_PATH . '/vendor/autoload.php';
 $a = new Core\WeChat(Library\Login\Logininfo::getInstance());
 $a->showQrCode();
 $a->login();
+//add listen helper
+$helper = new Library\Helper\ListenMessageHelper();
+$helper->add('test', new Library\ListenMessage\TestListenMessage());
+$helper->add('test2', new Library\ListenMessage\TestListenMessage2());
+$a->setListenHelper($helper);
+
 
 //$process = new Library\Progress\ProgressPcntl();
 ////接下去的代码进入后台运行
@@ -64,14 +70,14 @@ $process->run(function() use ($a) {
     $a->listenMessage();
 }, 'swxbot-listen-message');
 
-$process->run(function() use ($a) {
-    $b = new Library\Tasks\LogTask($a);
-    $b->run(array(
-        'php-act-root-dir' => '/home/vagrant/s-framework',
-        'sleep_time' => 5,
-        'monitor_files' => array('sql_error')
-    ));
-}, 'swxbot-log-task');
+//$process->run(function() use ($a) {
+//    $b = new Library\Tasks\LogTask($a);
+//    $b->run(array(
+//        'php-act-root-dir' => '/home/vagrant/s-framework',
+//        'sleep_time' => 5,
+//        'monitor_files' => array('sql_error')
+//    ));
+//}, 'swxbot-log-task');
 
 $process->wait();
 print_r($process->getProgresses());

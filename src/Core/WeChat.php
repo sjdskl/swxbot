@@ -12,6 +12,8 @@ namespace swxbot\Core;
 use swxbot\Conf\Config;
 use swxbot\Library\Helper\Tools;
 use swxbot\Library\Message\AbstractMessage;
+use swxbot\Library\Helper\ListenMessageHelper;
+use swxbot\Library\Login\Logininfo;
 use Requests;
 
 class WeChat
@@ -19,15 +21,18 @@ class WeChat
 
     private $_config;
     private $_login_info;
+    private $_listen_helper;
 
-    public function __construct($logininfo)
+    public function __construct(Logininfo $logininfo = null, $listen_helper = null)
     {
         $this->_config = Config::$_config;
         date_default_timezone_set('Asia/Shanghai');
-        $this->_setLogininfo($logininfo);
+        $logininfo && $this->setLogininfo($logininfo);
+        $listen_helper && $this->setListenHelper($listen_helper);
         //判断依赖的扩展;
+        $this->_checkExt();
     }
-
+    
     /**
      * 检查扩展
      */
@@ -36,11 +41,16 @@ class WeChat
         
     }
 
-    protected function _setLogininfo($logininfo)
+    public function setLogininfo(Logininfo $logininfo)
     {
         $this->_login_info = $logininfo;
     }
     
+    public function setListenHelper(ListenMessageHelper $listen_helper)
+    {
+        $this->_listen_helper = $listen_helper;
+    }
+
     protected function _analysisMsg($r)
     {
         return Tools::analysisMsg($r);
@@ -104,9 +114,9 @@ class WeChat
         
     }
 
-    public function listenMessage(callback $callback = null)
+    public function listenMessage($block = true)
     {
-        while (true) {
+        do {
             list($retcode, $selector) = Tools::syncCheck($this->_login_info->_webpush_host, $this->_login_info);
             if ($retcode == '1100') {
                 Tools::console('你在手机上登出了微信，债见');
@@ -116,6 +126,9 @@ class WeChat
                 if ($selector == '2') {
                     $r = $this->_receiveMsg();
                     $this->_analysisMsg($r);
+                    if($this->_listen_helper && !$this->_listen_helper->isEmpty()) {
+                        $this->_listen_helper->dispatch($r['AddMsgList'], $this);
+                    }
                 } else if ($selector == '6') {
                     
                 } else if ($selector == '7') {
@@ -125,7 +138,7 @@ class WeChat
                     Tools::console('没有通知内容');
                 }
             }
-        }
+        } while($block);
     }
 
     public function sendMessage(AbstractMessage $message)

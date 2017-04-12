@@ -83,6 +83,11 @@ abstract class AbstractMessage
     {
         $this->_name = $name;
     }
+    
+    public function getName()
+    {
+        return $this->_name;
+    }
 
     public function setMessage($message)
     {
