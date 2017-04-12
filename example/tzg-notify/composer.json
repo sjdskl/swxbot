@@ -1,6 +1,6 @@
 {
     "require": {
-        "sjdskl/swxbot": "^0.01.0"
+        "sjdskl/swxbot": "0.03"
     },
     "autoload": {
         "psr-4": {

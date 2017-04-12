@@ -43,8 +43,10 @@ class TzgLog extends AbstractTask
     {
         if(!$this->_seek) {
             $this->_seek = $this->_readSeekInfo();
-            foreach($this->_seek as $k => $v) {
-                $this->_seek[$k]['fp'] = null;
+            if($this->_seek) {
+                foreach($this->_seek as $k => $v) {
+                    $this->_seek[$k]['fp'] = null;
+                }
             }
         }
         foreach($monitor_files as $key => $file) {
@@ -88,6 +90,8 @@ class TzgLog extends AbstractTask
                 $this->_wc->sendMessage($this->_message);
             }
         }
+        fclose($this->_seek[$f]['fp']);
+        $this->_seek[$f]['fp'] = null;
     }
     
     protected function _checkLogLine($str)

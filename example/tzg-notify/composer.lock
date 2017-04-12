@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "df19869d2e445490f5d3f730ca75ff0e",
-    "content-hash": "d6f68b904864dac0611ffd9712a85c27",
+    "hash": "90dc4af87c8edaf02c3869d891c7546e",
+    "content-hash": "8a7a0b9532e17e222d561b2f52f02e73",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -375,16 +375,16 @@
         },
         {
             "name": "sjdskl/swxbot",
-            "version": "0.01",
+            "version": "0.03",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sjdskl/swxbot.git",
-                "reference": "f23e5687977c3fb8b6a1830839e2712d4c375dbc"
+                "reference": "d5e555259162d7e4e8dab105b39e95b0e266f925"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/sjdskl/swxbot/f23e5687977c3fb8b6a1830839e2712d4c375dbc.zip",
-                "reference": "f23e5687977c3fb8b6a1830839e2712d4c375dbc",
+                "url": "https://files.phpcomposer.com/files/sjdskl/swxbot/d5e555259162d7e4e8dab105b39e95b0e266f925.zip",
+                "reference": "d5e555259162d7e4e8dab105b39e95b0e266f925",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "progress",
                 "weixin"
             ],
-            "time": "2017-04-11 01:52:00"
+            "time": "2017-04-12 08:57:28"
         },
         {
             "name": "symfony/console",
