@@ -20,17 +20,17 @@ $process = new swxbot\Library\Progress\ProgressPcntl();
 #run background
 $process->runBackground();
 #create new process to run your code
-$process->run(function () use ($a) {
+$process->run(function () use ($swxbot) {
     echo "i am sjdskl1\n";
 }, 'swxbot-process1');
-$process->run(function () use ($a) {
+$process->run(function () use ($swxbot) {
     echo "i am sjdskl2\n";
 }, 'swxbot-process2');
 ```
 - tasks
 ```
 #use process run tasks, your task need extends abstractTasks
-$process->runTask(new \Library\Tasks\TzgLog($a), 
+$process->runTask(new \Library\Tasks\TzgLog($swxbot), 
 array(
     'php-act-root-dir' => '/opt/web-data/php-act',
     'sleep_time' => 5,
@@ -46,7 +46,7 @@ $helper->add('test', new swxbot\Library\ListenMessage\TestListenMessage());
 $helper->add('test2', new swxbot\Library\ListenMessage\TestListenMessage2());
 $swxbot->setListenHelper($helper);
 $process->runBackground();
-$process->run(function () use ($a) {
+$process->run(function () use ($swxbot) {
     $swxbot->listenMessage();
 }, 'swxbot-listen-message');
 ```

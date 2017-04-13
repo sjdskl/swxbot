@@ -38,7 +38,7 @@ class WeChat
      */
     protected function _checkExt()
     {
-        
+        return true;
     }
 
     public function setLogininfo(Logininfo $logininfo)
@@ -96,22 +96,6 @@ class WeChat
     public function login()
     {
         $this->_login_info->login();
-    }
-
-    /**
-     * 后台自动运行任务
-     */
-    public function runTasks()
-    {
-        
-    }
-
-    /**
-     * 交互方式运行
-     */
-    public function runInteractive()
-    {
-        
     }
 
     public function listenMessage($block = true)
