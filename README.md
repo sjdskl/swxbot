@@ -2,48 +2,51 @@ swxbot a weixin client
 =======================
 
 Guzzle is php weixin client that can login and send message and do something 
-you wang
+you want
 
 - Sample login weixin
+```
+#create and add logininfo
+$swxbot = new swxbot\Core\WeChat(swxbot\Library\Login\Logininfo::getInstance());
+#show qrcode
+$swxbot->showQrCode();
+#login
+$swxbot->login();
+```
 - multi process
-
 ```
-#example
-
-namespace swxbot;
-require APP_PATH . '/vendor/autoload.php';
-$a = new Core\WeChat(Library\Login\Logininfo::getInstance());
-$a->showQrCode();
-$a->login();
-//send message
-$message = new Library\Message\MessageText('sjdjoke', '呵呵呵1');
-$a->sendMessage($message);
-$message->setMessage('我在发一条1');
-$a->sendMessage($message);
-$message_img = new \Library\Message\MessageImg('sjdjoke', '22.jpg');
-$a->sendMessage($message_img);
-$message_file = new \Library\Message\MessageFile('sjdjoke', 'README.md');
-$a->sendMessage($message_file);
-
-//mulit process task
-$process = new Library\Progress\ProgressPcntl();
-//接下去的代码进入后台运行
+#create process
+$process = new swxbot\Library\Progress\ProgressPcntl();
+#run background
 $process->runBackground();
-$process->run(function() use ($a) {
-    $a->listenMessage();
-}, 'swxbot-listen-message');
-
-$process->run(function() use ($a) {
-    $b = new Library\Tasks\LogTask($a);
-    $b->run(array(
-        'php-act-root-dir' => '/home/vagrant/s-framework',
-        'sleep_time' => 5,
-        'monitor_files' => array('sql_error')
-    ));
-}, 'swxbot-log-task');
-
-$process->wait();
-print_r($process->getProgresses());
-
+#create new process to run your code
+$process->run(function () use ($a) {
+    echo "i am sjdskl1\n";
+}, 'swxbot-process1');
+$process->run(function () use ($a) {
+    echo "i am sjdskl2\n";
+}, 'swxbot-process2');
 ```
-
+- tasks
+```
+#use process run tasks, your task need extends abstractTasks
+$process->runTask(new \Library\Tasks\TzgLog($a), 
+array(
+    'php-act-root-dir' => '/opt/web-data/php-act',
+    'sleep_time' => 5,
+    'monitor_files' => array('sql_error')
+), 
+'swxbot-log-notify');
+```
+- listen message helper
+```
+#you can user helper to handle the message
+$helper = new swxbot\Library\Helper\ListenMessageHelper();
+$helper->add('test', new swxbot\Library\ListenMessage\TestListenMessage());
+$helper->add('test2', new swxbot\Library\ListenMessage\TestListenMessage2());
+$swxbot->setListenHelper($helper);
+$process->runBackground();
+$process->run(function () use ($a) {
+    $swxbot->listenMessage();
+}, 'swxbot-listen-message');
+```
