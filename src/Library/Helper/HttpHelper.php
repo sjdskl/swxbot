@@ -99,13 +99,15 @@ class HttpHelper
     protected function _request($method = 'GET', $url, $params = array(), $options = array())
     {
         $header = array();
+        if(isset($options['header'])) {
+            $header = $options['header'];
+        }
         if(isset($params['json'])) {
             $data = json_encode($params['json']);
+            $header['Content-Type'] = 'application/json';
         } else if (isset($params['body'])) {
             $data = $params['body'];
-            if(isset($options['header'])) {
-                $header = $options['header'];
-            } else {
+            if(!isset($options['header'])) {
                 $header['Content-Type'] = 'application/json';
             }
         } else {

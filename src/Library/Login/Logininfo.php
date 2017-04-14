@@ -36,7 +36,8 @@ class Logininfo
 
     private function __construct()
     {
-        ;
+        $this->_deviceid = $this->_deviceid();
+        $this->_initHttp();
     }
 
     private function __clone()
@@ -56,8 +57,6 @@ class Logininfo
     //登录操作
     public function login()
     {
-        $this->_deviceid = $this->_deviceid();
-        $this->_initHttp();
         $this->_run('_waitLogin');
         $this->_run('_waitLogin', 0);
         $this->_run('_redirect', null, 3);
@@ -78,7 +77,7 @@ class Logininfo
         } else {
             $flag = $this->$method();
         }
-        sleep(1);
+//        sleep(1);
         if(!$flag) {
             Tools::console('执行' . $method . '失败' );
             //重试

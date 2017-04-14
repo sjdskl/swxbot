@@ -15,7 +15,7 @@ use swxbot\Conf\Config;
 class MessageFile extends AbstractMessage
 {
 
-    public function __construct($name, $media)
+    public function __construct($name = '', $media = '')
     {
         $this->_name = $name;
         $this->_media = $media;
