@@ -12,6 +12,7 @@ namespace swxbot\Library\ListenMessage;
 use swxbot\Library\ListenMessage\AbstractListenMessage;
 use swxbot\Library\Helper\AesHelper;
 use swxbot\Core\WeChat;
+use swxbot\Library\Helper\Tools;
 use swxbot\Library\Helper\HttpHelper;
 use swxbot\Library\Message\MessageText;
 use swxbot\Library\Message\MessageImg;
@@ -45,7 +46,7 @@ class TulingMessage extends AbstractListenMessage
     
     public function run($message, WeChat $wc)
     {
-        $this->_userid = $message['ToUserName'];
+        $this->_userid = $message['FromUserName'];
         $params = array(
             'key' => $this->_api_key,
             'info' => $message['Content'],
@@ -63,6 +64,8 @@ class TulingMessage extends AbstractListenMessage
         $data = $this->_http->request('POST', 'http://www.tuling123.com/openapi/api', array(
             'json' => $post_data,
         ));
+        
+        Tools::console($data, 'tuling');
         
         $data = json_decode($data, true);
         if($data ) {
