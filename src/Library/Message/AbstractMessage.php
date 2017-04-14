@@ -20,6 +20,7 @@ abstract class AbstractMessage
     const MSG_TYPE_IMG = 3;
     const MSG_TYPE_EMOJI = 47;
     const MSG_TYPE_FILE = 6;
+    const MSG_TYPE_LINK = 49;
 
     protected $_login_info;
     //发送人员名称
