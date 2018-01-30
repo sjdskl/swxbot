@@ -83,6 +83,7 @@ class Logininfo
             //重试
             if($trys > 0) {
                 Tools::console('重新执行执行' . $method . ",trys=" . ($trys - 1));
+                sleep(5);
                 $this->_run($method, $param, -- $trys);
             } else {
                 exit;

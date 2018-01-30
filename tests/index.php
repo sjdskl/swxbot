@@ -15,8 +15,8 @@ $a->showQrCode();
 $a->login();
 
 $helper = new swxbot\Library\Helper\ListenMessageHelper();
-//$helper->add('test', new swxbot\Library\ListenMessage\TestListenMessage());
-$helper->add('tuling', new swxbot\Library\ListenMessage\TulingMessage('2c49d10fa88748d98f5d0d1e16111a6c', 'e510d47120b2b0f4'));
+$helper->add('test', new swxbot\Library\ListenMessage\TestListenMessage());
+//$helper->add('tuling', new swxbot\Library\ListenMessage\TulingMessage('2c49d10fa88748d98f5d0d1e16111a6c', 'e510d47120b2b0f4'));
 $a->setListenHelper($helper);
 
 $process = new swxbot\Library\Progress\ProgressPcntl();
