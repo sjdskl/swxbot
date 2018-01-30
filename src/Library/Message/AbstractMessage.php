@@ -22,11 +22,14 @@ abstract class AbstractMessage
     const MSG_TYPE_FILE = 6;
     const MSG_TYPE_LINK = 49;
 
+    /** @var Logininfo $_login_info */
     protected $_login_info;
     //发送人员名称
     protected $_name;
     protected $_message;
     protected $_media;
+    protected $_nickName;
+    protected $_remarkName;
 
     protected function _getClientId()
     {
@@ -54,7 +57,7 @@ abstract class AbstractMessage
         ), $this->_login_info->_base_request);
         $reqeust_data = array(
             'id' => 'WU_FILE_' . mt_rand(1, 1000),
-            'name' => $this->_media,
+            'name' => basename($this->_media),
             'type' => $mime,
             'lastModifieDate' => $stat['mtime'],
             'size' => strval($filesize),
@@ -84,10 +87,30 @@ abstract class AbstractMessage
     {
         $this->_name = $name;
     }
+
+    public function setNickname($nickName)
+    {
+        $this->_nickName = $nickName;
+    }
     
     public function getName()
     {
         return $this->_name;
+    }
+
+    public function getNickname()
+    {
+        return $this->_nickName;
+    }
+
+    public function setRemarkname($remarkName)
+    {
+        $this->_remarkName = $remarkName;
+    }
+
+    public function getRemarkname()
+    {
+        return $this->_remarkName;
     }
 
     public function setMessage($message)

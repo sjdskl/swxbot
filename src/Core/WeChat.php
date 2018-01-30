@@ -22,6 +22,8 @@ class WeChat
     private $_config;
     private $_login_info;
     private $_listen_helper;
+    //昵称和标记对应用户名映射缓存
+    private $_cache_map = [];
 
     public function __construct(Logininfo $logininfo = null, $listen_helper = null)
     {
@@ -127,6 +129,27 @@ class WeChat
 
     public function sendMessage(AbstractMessage $message)
     {
+        //convert name
+        //check if set nickname
+        if($message->getNickname() || $message->getRemarkname()) {
+            if(isset($this->_cache_map['nick'][$message->getNickname()])) {
+                $message->setName($this->_cache_map['nick'][$message->getNickname()]);
+            } else if(isset($this->_cache_map['remark'][$message->getRemarkname()])) {
+                $message->setName($this->_cache_map['remark'][$message->getRemarkname()]);
+            } else {
+                foreach($this->_login_info->_member_list as $m) {
+                    if(($message->getNickname() && $m['NickName'] == $message->getNickname()) || ($message->getRemarkname() && $m['RemarkName'] == $message->getRemarkname())) {
+                        $message->setName($m['UserName']);
+                        if($message->getNickname()) {
+                            $this->_cache_map['nick'][$message->getNickname()] = $m['UserName'];
+                        } else if($message->getRemarkname()) {
+                            $this->_cache_map['remark'][$message->getRemarkname()] = $m['UserName'];
+                        }
+                        break;
+                    }
+                }
+            }
+        }
         Tools::sendMessage($this->_login_info, $message);
     }
 

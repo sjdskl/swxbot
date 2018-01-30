@@ -8,6 +8,7 @@
  */
 namespace swxbot\Library\Message;
 
+use swxbot\Library\Helper\Tools;
 use swxbot\Library\Message\AbstractMessage;
 use swxbot\Conf\Config;
 
@@ -34,6 +35,8 @@ class MessageImg extends AbstractMessage
                 'ToUserName' => $this->_name,
                 'Type' => self::MSG_TYPE_IMG,
         )));
+
+        Tools::console($post_data);
         
         return json_encode($post_data);
     }

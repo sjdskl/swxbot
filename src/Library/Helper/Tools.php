@@ -120,7 +120,7 @@ class Tools
     
     public static function sendMessage(Logininfo $logininfo, AbstractMessage $message)
     {
-        if($logininfo->_user['UserName'] == $message->getName()) {
+        if($logininfo->_user['UserName'] == $message->getName() || !$message->getName()) {
             return true;
         }
         $message->setLoginInfo($logininfo);

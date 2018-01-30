@@ -33,7 +33,7 @@ class MessageText extends AbstractMessage
                 'ToUserName' => $this->_name,
                 'Type' => self::MSG_TYPE_TEXT,
         )));
-//        Tools::console($post_data);
+        Tools::console($post_data);
         return json_encode($post_data, JSON_UNESCAPED_UNICODE);
     }
 
