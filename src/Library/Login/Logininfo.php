@@ -14,11 +14,13 @@ use GuzzleHttp\Client;
 use swxbot\Conf\Config;
 use swxbot\Library\Helper\Tools;
 use swxbot\Library\Helper\HttpHelper;
+use swxbot\Library\Progress\ProgressPcntl;
 
 class Logininfo
 {
 
     private static $_instance;
+    public $_cache = array();
     public $_jar;
     public $_debug = false;
     public $_http;
@@ -36,8 +38,11 @@ class Logininfo
 
     private function __construct()
     {
-        $this->_deviceid = $this->_deviceid();
-        $this->_initHttp();
+        $this->_cache = $this->initCache();
+        if(!$this->_cache) {
+            $this->_deviceid = $this->_deviceid();
+            $this->_initHttp();
+        }
     }
 
     private function __clone()
@@ -54,15 +59,49 @@ class Logininfo
         return self::$_instance;
     }
 
+    public function initCache()
+    {
+        $cache = Config::get('cache');
+        if(file_exists($cache)) {
+            $cacheData = unserialize(file_get_contents($cache));
+            if($cacheData) {
+                $time = $cacheData['create'];
+                if(time() - $time <= 900) {
+                    unset($cacheData['create']);
+                    foreach($cacheData as $key => $val) {
+                        $this->$key = $val;
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     //登录操作
     public function login()
     {
-        $this->_run('_waitLogin');
-        $this->_run('_waitLogin', 0);
-        $this->_run('_redirect', null, 3);
+        if(!$this->_cache) {
+            $this->_run('_waitLogin');
+            $this->_run('_waitLogin', 0);
+            $this->_run('_redirect', null, 3);
+        }
+
+        $this->_base_request = array(
+            'BaseRequest' => array(
+                'Uin' => intval($this->_uin),
+                'Sid' => $this->_sid,
+                'Skey' => $this->_skey,
+                'DeviceID' => $this->_deviceid,
+            )
+        );
+
         $this->_run('_initWeixin', null, 3);
         $this->_run('_notify', null, 3);
         $this->_run('_contact', null, 3);
+
         Tools::console('共有:' . $this->_member_count . "个好友", "info");
         Tools::console('共有:' . count($this->_group_list) . "个群," . count($this->_member_list) . "个联系人," . count($this->_public_user_list) . "个公众号或服务号");
 //        $this->_run('_getbatchcontact');
@@ -185,6 +224,7 @@ class Logininfo
         $this->_sync_key_arr = $this->_init_data['SyncKey'];
         $this->_sync_key = Tools::syncKey($this->_init_data['SyncKey']);
         $this->_user = $this->_init_data['User'];
+
         return true;
     }
 
@@ -228,6 +268,10 @@ class Logininfo
         if (!Tools::checkHttpResponse($data)) {
             return false;
         }
+        if ($data['BaseResponse']['Ret'] != 0) {
+            Tools::console('contact获取数据出错了', 'error');
+            return false;
+        }
         $this->_member_count = $data['MemberCount'];
         $this->_member_list = $data['MemberList'];
         foreach ($this->_member_list as $key => $row) {
@@ -248,6 +292,30 @@ class Logininfo
             $t[$value['UserName']] = $value;
         }
         $this->_member_list = $t;
+
+
+        $this->_cache = array(
+            '_deviceid' => $this->_deviceid,
+            '_http' => $this->_http,
+            '_uuid' => $this->_uuid,
+            '_skey' => $this->_skey,
+            '_sid' => $this->_sid,
+            '_uin' => $this->_uin,
+            '_pass_ticket' => $this->_pass_ticket,
+            '_sync_key_arr' => $this->_sync_key_arr,
+            '_sync_key' => $this->_sync_key,
+            '_user' => $this->_user,
+            '_member_list' => $this->_member_list,
+            '_member_count' => $this->_member_count,
+            '_public_user_list' => $this->_public_user_list,
+            '_special_users' => $this->_special_users,
+            '_group_list' => $this->_group_list,
+            '_group_member_list' => $this->_group_member_list,
+            'create' => time(),
+        );
+
+        file_put_contents(Config::get('cache'), serialize($this->_cache));
+
         return true;
     }
 
