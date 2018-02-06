@@ -103,6 +103,7 @@ class WeChat
     public function listenMessage($block = true)
     {
         do {
+            $t = Tools::getMicrotime();
             list($retcode, $selector) = Tools::syncCheck($this->_login_info->_webpush_host, $this->_login_info);
             if ($retcode == '1100') {
                 Tools::console('你在手机上登出了微信，债见');
@@ -123,6 +124,11 @@ class WeChat
                 } else if ($selector == '0') {
                     Tools::console('没有通知内容');
                 }
+            }
+            //当快速循环时，增加sleep时间
+            $t = Tools::getMicrotime() - $t;
+            if($t < 5) {
+                sleep(5);
             }
         } while($block);
     }

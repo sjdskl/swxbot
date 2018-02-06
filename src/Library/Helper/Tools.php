@@ -208,5 +208,10 @@ class Tools
         return $t;
     }
 
+    public static function getMicrotime()
+    {
+        return microtime(true);
+    }
+
 
 }

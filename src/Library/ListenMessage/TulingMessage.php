@@ -127,13 +127,13 @@ class TulingMessage extends AbstractListenMessage
         }
         $fname = md5($this->_data['url']);
         $contents = $this->_http->request('GET', $this->_data['url']);
-        $c = preg_match('/window\.initData\s=.+?;/i', $contents, $d);
+        $c = preg_match('/initData\>[\s\S]*?\</i', $contents, $d);
         //取第一张图片
         if($c) {
-            $str = str_replace('window.initData = ', '', str_replace(';', '', $d[0]));
+            $str = str_replace('initData>', '', str_replace('<', '', $d[0]));
             $json = json_decode($str, true);
             if($json) {
-                $url = $json['list'][0]['thumb'];
+                $url = $json['initData']['list'][0]['thumb'];
                 $info = pathinfo($url);
                 $fname = $fname  . "." . $info['extension'];
                 file_put_contents('wx_img/' . $fname, $this->_http->request('GET', $url));
