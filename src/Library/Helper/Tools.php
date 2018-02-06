@@ -165,6 +165,7 @@ class Tools
         ));
         self::console($url);
         $data = $logininfo->_http->request('GET', $url);
+        self::console($data);
         if (!self::checkHttpResponse($data)) {
             self::console('synccheck失败');
             return false;
