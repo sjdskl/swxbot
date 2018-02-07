@@ -79,7 +79,7 @@ class HttpHelper
         }
     }
     
-    public function upload($file, $url, $params = array(), $options = array())
+    public function upload($file, $url, $params = array(), $options = array(), $trys = 0)
     {
         if(!file_exists($file)){
             return false;
@@ -92,6 +92,10 @@ class HttpHelper
             }
         } catch (\Exception $ex) {
             Tools::log('上传出错,' . $ex->getMessage());
+            if($trys < 3) {
+                Tools::console("上传重试第" . (++$trys) . "次");
+                $this->upload($file, $url, $params, $options, $trys);
+            }
         }
         
     }
