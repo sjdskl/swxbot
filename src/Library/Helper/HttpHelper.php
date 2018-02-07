@@ -81,6 +81,7 @@ class HttpHelper
     
     public function upload($file, $url, $params = array(), $options = array(), $trys = 0)
     {
+        Tools::console("上传文件:" . $file);
         if(!file_exists($file)){
             return false;
         }
