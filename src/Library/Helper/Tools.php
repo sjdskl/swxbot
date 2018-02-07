@@ -118,7 +118,7 @@ class Tools
         return $data;
     }
     
-    public static function sendMessage(Logininfo $logininfo, AbstractMessage $message)
+    public static function sendMessage(Logininfo $logininfo, AbstractMessage $message, $trys = 0)
     {
         if($logininfo->_user['UserName'] == $message->getName() || !$message->getName()) {
             return true;
@@ -132,6 +132,10 @@ class Tools
         $data = json_decode($data, true);
         if (!self::checkHttpResponse($data)) {
             self::console('发送失败');
+            if($trys < 3) {
+                self::console("失败重试第" . ++ $trys . "次");
+                self::sendMessage($logininfo, $message, $trys);
+            }
             return false;
         }
         self::console($data['BaseResponse']['Ret'] == 0 ? '发送成功' : '发送失败', 'info');
