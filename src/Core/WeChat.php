@@ -116,8 +116,12 @@ class WeChat
                     if($this->_listen_helper && !$this->_listen_helper->isEmpty()) {
                         $this->_listen_helper->dispatch($r['AddMsgList'], $this);
                     }
-                } else if ($selector == '6') {
-                    
+                } else if ($selector == '6' || $selector == '3') {
+                    $r = $this->_receiveMsg();
+                    Tools::console('selector=' . $selector . ",result=" . json_encode($r));
+                    $this->_analysisMsg($r);
+                    Tools::console("貌似出错了，退出");
+                    break;
                 } else if ($selector == '7') {
                     Tools::console('你进入了手机微信');
                     sleep(10);
