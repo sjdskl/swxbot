@@ -120,8 +120,8 @@ class WeChat
                     $r = $this->_receiveMsg();
                     Tools::console('selector=' . $selector . ",result=" . json_encode($r));
                     $this->_analysisMsg($r);
-                    Tools::console("貌似出错了，退出");
-                    break;
+                    Tools::console("貌似出错了");
+//                    break;
                 } else if ($selector == '7') {
                     Tools::console('你进入了手机微信');
                     sleep(10);
