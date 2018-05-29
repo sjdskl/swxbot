@@ -34,7 +34,7 @@ class MessageText extends AbstractMessage
                 'Type' => self::MSG_TYPE_TEXT,
         )));
         Tools::console($post_data);
-        return json_encode($post_data, JSON_UNESCAPED_UNICODE);
+        return json_encode($post_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
     public function getUrl()
