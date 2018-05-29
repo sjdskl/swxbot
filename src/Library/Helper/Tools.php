@@ -47,7 +47,7 @@ class Tools
             $msg = var_export($msg, true);
         }
         $msg = date('Y-m-d H:i:s') . " " . $desc . " " . $level . ":" . $msg . "\n";
-        file_put_contents("log-" . date('Y-m-d') . "", $msg, FILE_APPEND);
+        file_put_contents(Config::get('log') . "swxbot-log-" . date('Y-m-d') . "", $msg, FILE_APPEND);
     }
     
     public static function setLocalCacertFile($n = 'cacert.pem')

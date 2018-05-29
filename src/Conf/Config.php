@@ -33,6 +33,8 @@ class Config
         ),
         'lang' => 'zh_CN',
         'appid' => 'wx782c26e4c19acffb',
+        'cache' => 'cache.data',
+        'log' => '',
     );
 
     private function __construct()
