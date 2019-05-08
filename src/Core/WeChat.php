@@ -54,22 +54,19 @@ class WeChat
         return $this->_login_info;
     }
 
-    public function getMemberList($nickname = '')
+    public function getMemberList()
     {
-        if(!$nickname) {
-            return $this->_login_info->_member_list;
-        } else {
-
-        }
+        return $this->_login_info->_member_list;
     }
 
-    public function getPublicList($nickname = '')
+    public function getPublicList()
     {
-        if(!$nickname) {
-            return $this->_login_info->_member_list;
-        } else {
+        return $this->_login_info->_member_list;
+    }
 
-        }
+    public function getGroupList()
+    {
+        return $this->_login_info->_group_list;
     }
     
     public function setListenHelper(ListenMessageHelper $listen_helper)
