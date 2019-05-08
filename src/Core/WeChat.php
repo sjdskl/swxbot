@@ -61,7 +61,7 @@ class WeChat
 
     public function getPublicList()
     {
-        return $this->_login_info->_member_list;
+        return $this->_login_info->_public_user_list;
     }
 
     public function getGroupList()
