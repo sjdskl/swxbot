@@ -50,4 +50,3 @@ $process->run(function () use ($swxbot) {
     $swxbot->listenMessage();
 }, 'swxbot-listen-message');
 ```
-222

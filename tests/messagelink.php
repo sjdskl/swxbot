@@ -15,18 +15,18 @@ $a = new swxbot\Core\WeChat(swxbot\Library\Login\Logininfo::getInstance());
 $a->showQrCode();
 $a->login();
 
-//$link = new swxbot\Library\Message\MessageLink();
-//$link->setFilename('百度');
-//$link->setUrl('https://www.baidu.com');
-//$link->setNickname('joke');
-//$a->sendMessage($link);
+$link = new swxbot\Library\Message\MessageLink();
+$link->setFilename('百度');
+$link->setUrl('https://www.baidu.com');
+$link->setNickname('sjdskl');
+$a->sendMessage($link);
 //
 //$link = new swxbot\Library\Message\MessageText();
 //$link->setMessage('123123');
 //$link->setNickname('joke');
 //$a->sendMessage($link);
 
-$link = new \swxbot\Library\Message\MessageImg();
-$link->setNickname('joke');
-$link->setMedia("/tmp/1.jpg");
-$a->sendMessage($link);
+//$link = new \swxbot\Library\Message\MessageImg();
+//$link->setNickname('sjdskl');
+//$link->setMedia("/tmp/1.jpg");
+//$a->sendMessage($link);

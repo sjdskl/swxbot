@@ -6,3 +6,6 @@ nbproject/project.xml
 seek
 /log-2017*
 nbproject/
+tests/wx_img
+cache.data
+swxbot-log-*

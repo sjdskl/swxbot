@@ -46,22 +46,42 @@ class TulingMessage extends AbstractListenMessage
     
     public function run($message, WeChat $wc)
     {
+        if(!$message['Content']) {
+            return false;
+        }
+
         $this->_userid = $message['FromUserName'];
-        $params = array(
-            'key' => $this->_api_key,
-            'info' => $message['Content'],
-            'userid' => md5($this->_userid),
-            'loc'    => ''
+
+        $post_data = array (
+            'reqType' => 0,
+            'perception' =>
+                array (
+                    'inputText' =>
+                        array (
+                            'text' => $message['Content'],
+                        ),
+                    'inputImage' =>
+                        array (
+                            'url' => 'imageUrl',
+                        ),
+                    'selfInfo' =>
+                        array (
+                            'location' =>
+                                array (
+                                    'city' => '',
+                                    'province' => '',
+                                    'street' => '',
+                                ),
+                        ),
+                ),
+            'userInfo' =>
+                array (
+                    'apiKey' => $this->_api_key,
+                    'userId' => 'sss',
+                ),
         );
-        $timestamp = time();
-        $key = $this->_secret . $timestamp . $this->_api_key;
-        $post_data = array(
-            'key' => $this->_api_key,
-            'timestamp' => $timestamp,
-            'data' => $this->encryption($params, $key),
-        );
-        
-        $data = $this->_http->request('POST', 'http://www.tuling123.com/openapi/api', array(
+
+        $data = $this->_http->request('POST', 'http://www.tuling123.com/openapi/api/v2', array(
             'json' => $post_data,
         ));
         
@@ -93,18 +113,51 @@ class TulingMessage extends AbstractListenMessage
      */
     protected function _analysisMessage($wc)
     {
-        switch($this->_data['code']) {
-            case '100000':$this->_text();$wc->sendMessage($this->_message_text);break;
-            case '200000':$this->_img();$wc->sendMessage($this->_message_img);break;
-            case '302000':break;
-            case '308000':break;
-            case '313000':break;
-            case '314000':break;
-            default: {
+        $this->_message_text->setName($this->_userid);
+        $this->_data['results'] = array_reverse($this->_data['results']);
+        switch($this->_data['intent']['code']) {
+            case 10004:
+                foreach ($this->_data['results'] as $res) {
+                    $this->_message_text->setMessage($res['values'][$res['resultType']]);
+                    $wc->sendMessage($this->_message_text);
+                }
+                break;
+            case 10014:
+                foreach ($this->_data['results'] as $res) {
+                    $type = $res['resultType'];
+                    if($type == 'url') {
+                        $this->_img($res['values'][$res['resultType']]);
+                        $wc->sendMessage($this->_message_img);
+                    } else {
+                        $this->_message_text->setMessage($res['values'][$res['resultType']]);
+                        $wc->sendMessage($this->_message_text);
+                    }
+                }
+                break;
+            case 10008:
+                break;
+            default:
                 $this->_notSupport();
                 $wc->sendMessage($this->_message_text);
-            }
         }
+
+
+
+
+
+//        switch($this->_data['intent']['code']) {
+//            case '40002':;
+//            case '100000':$this->_text();$wc->sendMessage($this->_message_text);break;
+//            case '200000':$this->_img();$wc->sendMessage($this->_message_img);break;
+//            case '302000':break;
+//            case '308000':break;
+//            case '313000':break;
+//            case '314000':break;
+//            default: {
+//                $this->_notSupport();
+//                $wc->sendMessage($this->_message_text);
+//            }
+//        }
     }
     
     protected function _notSupport()
@@ -120,13 +173,13 @@ class TulingMessage extends AbstractListenMessage
         $this->_message_text->setMessage($this->_data['text']);
     }
     
-    protected function _img()
+    protected function _img($url)
     {
         if(!is_dir('wx_img')) {
             @mkdir('wx_img');
         }
-        $fname = md5($this->_data['url']);
-        $contents = $this->_http->request('GET', $this->_data['url']);
+        $fname = md5($url);
+        $contents = $this->_http->request('GET', $url);
         $c = preg_match('/initData\>[\s\S]*?\</i', $contents, $d);
         //取第一张图片
         if($c) {

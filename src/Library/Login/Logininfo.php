@@ -66,7 +66,7 @@ class Logininfo
             $cacheData = unserialize(file_get_contents($cache));
             if($cacheData) {
                 $time = $cacheData['create'];
-                if(time() - $time <= 900) {
+                if(time() - $time <= 30) {
                     unset($cacheData['create']);
                     foreach($cacheData as $key => $val) {
                         $this->$key = $val;
@@ -104,6 +104,7 @@ class Logininfo
 
         Tools::console('共有:' . $this->_member_count . "个好友", "info");
         Tools::console('共有:' . count($this->_group_list) . "个群," . count($this->_member_list) . "个联系人," . count($this->_public_user_list) . "个公众号或服务号");
+//        Tools::console("公众号:" . json_encode($this->_public_user_list));
 //        $this->_run('_getbatchcontact');
         $this->_run('_testSyncCheck', null, 3);
     }

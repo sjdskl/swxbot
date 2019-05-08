@@ -20,6 +20,7 @@ class WeChat
 {
 
     private $_config;
+    /** @var Logininfo $_login_info */
     private $_login_info;
     private $_listen_helper;
     //昵称和标记对应用户名映射缓存
@@ -46,6 +47,29 @@ class WeChat
     public function setLogininfo(Logininfo $logininfo)
     {
         $this->_login_info = $logininfo;
+    }
+
+    public function getLoginInfo()
+    {
+        return $this->_login_info;
+    }
+
+    public function getMemberList($nickname = '')
+    {
+        if(!$nickname) {
+            return $this->_login_info->_member_list;
+        } else {
+
+        }
+    }
+
+    public function getPublicList($nickname = '')
+    {
+        if(!$nickname) {
+            return $this->_login_info->_member_list;
+        } else {
+
+        }
     }
     
     public function setListenHelper(ListenMessageHelper $listen_helper)

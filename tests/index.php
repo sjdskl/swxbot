@@ -22,10 +22,16 @@ $helper->add('tuling', new swxbot\Library\ListenMessage\TulingMessage('2c49d10fa
 $a->setListenHelper($helper);
 
 $process = new swxbot\Library\Progress\ProgressPcntl();
-$process->runBackground();
+//$process->runBackground();
 $process->run(function () use ($a) {
     $a->listenMessage();
 }, 'swxbot-listen-message');
+
+//$text = new \swxbot\Library\Message\MessageText('@a444c9aaaf3baa736f8b1b3a2723bcf3', '发现一个精彩的网站: https://gio.ren/r32746y');
+//$a->sendMessage($text);
+
+false && $process->runTask(new \swxbot\Library\Tasks\TestTask($a), [], 'test-task');
+
 
 false && $process->runTask(new \Library\Tasks\TzgLog($a), 
     array(
